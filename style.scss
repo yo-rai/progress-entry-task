@@ -1,0 +1,52 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat|Roboto:300,400,700&display=swap");
+
+body {
+    font-family: "Roboto", sans-serif;
+    color: black;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+    font-family: "Roboto", sans-serif;
+}
+
+button {
+    text-align: center;
+    font: inherit;
+    margin: 2px 0;
+    border: solid 1px transparent;
+    border-radius: 4px;
+    padding: 0.5em 1em;
+    color: #ffffff;
+    background-color: #8b4ca3;
+}
+
+.ag-styles {
+    .ag-body-viewport {
+        padding: 1px;
+    }
+    .ag-row-even,
+    .ag-row-odd {
+        border-bottom: 1px solid #0dcebe;
+    }
+    .ag-row {
+        border-bottom: 1px solid #0dcebe;
+        &:not(.ag-row-first) {
+            border-bottom: 1px solid #0dcebe;
+        }
+
+        .ag-cell {
+            white-space: normal;
+        }
+    }
+}

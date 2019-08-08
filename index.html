@@ -1,0 +1,122 @@
+<html>
+
+<head>
+    <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <h1>Products List</h1>
+    <button onclick="hide()">Hide Detailed Data</button>
+    <div id="myGrid" style="height: 600px" class="ag-styles"></div>
+
+    <script type="text/javascript" charset="utf-8">
+        let rowId;
+        let columnDefs = [{
+                headerName: 'Product Name',
+                field: 'ProductName',
+                sortable: true,
+                autoHeight: true
+            },
+            {
+                headerName: 'Units In Stock',
+                field: 'UnitsInStock',
+                sortable: true,
+                autoHeight: true
+            },
+            {
+                headerName: 'Unit Price',
+                field: 'UnitPrice',
+                sortable: true,
+                autoHeight: true
+            },
+            {
+                headerName: 'Discontinued',
+                field: 'Discontinued',
+                editable: false,
+                autoHeight: true,
+                cellRenderer: params => {
+                    return `<input type='checkbox' disabled ${params.value ? 'checked' : ''} />`;
+                }
+            },
+            {
+                headerName: 'Details',
+                autoHeight: true,
+                cellRenderer: function (params) {
+                    const button = document.createElement('button');
+                    button.addEventListener('click', toggleDetails.bind(null, params));
+                    button.innerHTML = 'Toggle Details';
+                    return button;
+                }
+            },
+            {
+                headerName: 'Category Name',
+                field: 'Category.CategoryName',
+                hide: true,
+                autoHeight: true,
+                valueGetter: function (params) {
+                    if (params.node.id === rowId) {
+                        const displayValue = params.data.Category.CategoryName;
+                        return displayValue;
+                    }
+                }
+            },
+            {
+                headerName: 'Description',
+                field: 'Category.Description',
+                resizable: true,
+                hide: true,
+                autoHeight: true,
+                valueGetter: function (params) {
+                    const displayValue = params.node.id === rowId ? params.data.Category.Description : '';
+                    return displayValue;
+                }
+            }
+
+        ];
+
+        let gridOptions = {
+            columnDefs: columnDefs,
+            animateRows: true
+        };
+
+        function toggleDetails(params) {
+            if (!gridOptions.columnApi.getColumn('Category.CategoryName').isVisible()) {
+                gridOptions.columnApi.setColumnsVisible(['Category.CategoryName', 'Category.Description'], true);
+                rowId = params.node.id;
+                params.api.redrawRows();
+            } else {
+                gridOptions.columnApi.setColumnsVisible(['Category.CategoryName', 'Category.Description'], false);
+            }
+        }
+
+        function hide() {
+            gridOptions.columnApi.setColumnsVisible(['Category.CategoryName', 'Category.Description'], false);
+        }
+
+        let eGridDiv = document.querySelector('#myGrid');
+
+        new agGrid.Grid(eGridDiv, gridOptions);
+        fetch(
+                'https://cors-anywhere.herokuapp.com/https://demos.telerik.com/kendo-ui/content/shared/js/products.js', {
+                    method: 'get',
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        Accept: 'application/x-javascript'
+                    }
+                })
+            .then(function (response) {
+                return response.text();
+            })
+            .then(function (data) {
+                eval(data);
+                return products;
+            })
+            .then(function (data) {
+                gridOptions.api.setRowData(data);
+            });
+    </script>
+</body>
+
+</html>

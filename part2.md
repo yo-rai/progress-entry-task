@@ -25,6 +25,9 @@ Now it is time to configure the grid itself to DOM element (#grid) and here how 
 The data source could be dynamic or static. The example above demonstrates how to specify the field attribute in the column array so that the Grid displays the required data from the response. The columns also have a title property which provides more user-friendly header titles for the columns.
 
 <b>Step 5:</b>
+In your particular case you mention you are visualising information from a JSON and this is how it should be setup:
+<img src="https://scontent.fsof10-1.fna.fbcdn.net/v/t1.0-9/68336821_10156554455137616_8364093301632008192_o.jpg?_nc_cat=109&_nc_oc=AQlQWpNd_zcRBTJ5Xegqcvs9_HA2ZnrG5SCiZI0C1u38eg4nwYMMfzaIKiLos2FQPoo&_nc_ht=scontent.fsof10-1.fna&oh=c4624a7d8c46bc472d90b830c1879d05&oe=5DD42101">
+
 
 For further tuning, please refer to the following links:
 

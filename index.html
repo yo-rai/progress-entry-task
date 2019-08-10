@@ -9,10 +9,11 @@
 <body>
     <h1>Products List</h1>
     <div align="right"><button onclick="hide()">Hide Detailed Data</button></div>
+    <!-- <div align="right"><button onclick="show()">Show Detailed Data</button></div> -->
     <div id="myGrid" style="height: 600px" class="ag-styles"></div>
 
     <script type="text/javascript" charset="utf-8">
-        let rowId;
+        let rowId = new Set();
         let columnDefs = [{
                 headerName: 'Product Name',
                 field: 'ProductName',
@@ -56,7 +57,7 @@
                 hide: true,
                 autoHeight: true,
                 valueGetter: function (params) {
-                    if (params.node.id === rowId) {
+                    if (rowId.has(params.node.id)) {
                         const displayValue = params.data.Category.CategoryName;
                         return displayValue;
                     }
@@ -69,7 +70,7 @@
                 hide: true,
                 autoHeight: true,
                 valueGetter: function (params) {
-                    const displayValue = params.node.id === rowId ? params.data.Category.Description : '';
+                    const displayValue = rowId.has(params.node.id) ? params.data.Category.Description : '';
                     return displayValue;
                 }
             }
@@ -82,17 +83,28 @@
         };
 
         function toggleDetails(params) {
-            if (!gridOptions.columnApi.getColumn('Category.CategoryName').isVisible()) {
-                gridOptions.columnApi.setColumnsVisible(['Category.CategoryName', 'Category.Description'], true);
-                rowId = params.node.id;
-                params.api.redrawRows();
+            if (!rowId.has(params.node.id)) {
+                rowId.add(params.node.id);
             } else {
-                gridOptions.columnApi.setColumnsVisible(['Category.CategoryName', 'Category.Description'], false);
+                rowId.delete(params.node.id);
             }
+
+            if (!rowId.size) {
+                hide();
+            } else {
+                show();
+                params.api.redrawRows();
+            }
+            
         }
 
         function hide() {
             gridOptions.columnApi.setColumnsVisible(['Category.CategoryName', 'Category.Description'], false);
+            rowId.clear();
+        }
+
+        function show() {
+            gridOptions.columnApi.setColumnsVisible(['Category.CategoryName', 'Category.Description'], true);
         }
 
         let eGridDiv = document.querySelector('#myGrid');
